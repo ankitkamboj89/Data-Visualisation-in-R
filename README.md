@@ -1,15 +1,15 @@
-# Data-Visualisation-in-R
-The data set analysed is titled "US Accident Injury Dataset". Data Contains Information about the accidents in the mines in USA.
-Visualisation and analysis of Accidents related data in mines
-Ankit Kamboj 14/09/2022
+---
 
-Introduction
+**Introduction**
 
+```
 The data set analysed is titled "US Accident Injury Dataset". 
 
 Data Contains Information about the accidents in the mines in USA.
-About the Data
+```
 
+**About the Data**
+```
 Unique vs Duplicate variables
 Total Unique attributs: 39 
 Duplicate (Explanation) attributes: 18
@@ -21,62 +21,33 @@ Total continous attributes: 4
 Total attributes: 57
 
 Total observations: 202815 (each indicates an accident event)
-Loading Data and Libraries
+```
 
+**Loading Data and Libraries**
+```
 Libraries used:
 library(tidyverse)
 
 Data file Used:
 us_data.csv (138 mb file)
+
+```
+```{r}
 d<- read.csv("~/Subjects/S2_2021/Computational Data Analysis/Project 1/Data-Visualisation-in-R/us_data.csv")
 library(tidyverse)
-## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
+```
 
-## v ggplot2 3.3.5     v purrr   0.3.4
-## v tibble  3.1.3     v dplyr   1.0.7
-## v tidyr   1.1.3     v stringr 1.4.0
-## v readr   2.0.0     v forcats 0.5.1
-
-## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
-“NA” entries in data
-
+**"NA" entries in data**
+```{r}
 #NA entries
 apply(is.na(d), 2, sum)
-##             MINE_ID       CONTROLLER_ID     CONTROLLER_NAME         OPERATOR_ID 
-##                   0                   0                   0                   0 
-##       OPERATOR_NAME       CONTRACTOR_ID         DOCUMENT_NO          SUBUNIT_CD 
-##                   0                   0                   0                   0 
-##             SUBUNIT         ACCIDENT_DT              CAL_YR             CAL_QTR 
-##                   0                   0                   0                   0 
-##           FISCAL_YR          FISCAL_QTR       ACCIDENT_TIME    DEGREE_INJURY_CD 
-##                   0                   0                   0                   0 
-##       DEGREE_INJURY       FIPS_STATE_CD      UG_LOCATION_CD         UG_LOCATION 
-##                   0                   0                   0                   0 
-## UG_MINING_METHOD_CD    UG_MINING_METHOD     MINING_EQUIP_CD        MINING_EQUIP 
-##                   0                   0                   0                   0 
-##        EQUIP_MFR_CD      EQUIP_MFR_NAME      EQUIP_MODEL_NO    SHIFT_BEGIN_TIME 
-##                   0                   0                  48                 991 
-##   CLASSIFICATION_CD      CLASSIFICATION    ACCIDENT_TYPE_CD       ACCIDENT_TYPE 
-##                   0                   0                   0                   0 
-##         NO_INJURIES           TOT_EXPER          MINE_EXPER           JOB_EXPER 
-##                   0               37400               34325               33746 
-##       OCCUPATION_CD          OCCUPATION         ACTIVITY_CD            ACTIVITY 
-##                   0                   0                   0                   0 
-##    INJURY_SOURCE_CD       INJURY_SOURCE    NATURE_INJURY_CD       NATURE_INJURY 
-##                   0                   0                   0                   0 
-##    INJ_BODY_PART_CD       INJ_BODY_PART     SCHEDULE_CHARGE       DAYS_RESTRICT 
-##                   0                   0               65006               54855 
-##           DAYS_LOST          TRANS_TERM   RETURN_TO_WORK_DT     IMMED_NOTIFY_CD 
-##               39676                   0                   0                   0 
-##        IMMED_NOTIFY     INVEST_BEGIN_DT           NARRATIVE       CLOSED_DOC_NO 
-##                   0                   0                   0              116620 
-##      COAL_METAL_IND 
-##                   0
+```
 
-Number of accidents in a years from 2000 to 2015
 
+<br>
+**Number of accidents in a years from 2000 to 2015**
+
+```{r}
 ##Data transformation - converting to factor
 d$SUBUNIT_CD <- factor(d$SUBUNIT_CD) 
 
@@ -85,22 +56,34 @@ plot(ggplot(data=d, xlab = "Calender Year") +
   geom_bar(aes(x=CAL_YR, fill=SUBUNIT_CD)) +
   theme(text = element_text(size= 10)) +
     labs(title = "Number of Accidents")) 
+```
 
+```
 It can be observed that the accident number has constantly fallen over the years. The number of accidents drastically falls in 2015.
+```
 
-Location within a mine where the accident occurred
+<br>
+**Location within a mine where the accident occurred**
+```{r}
 
 ##Plot of the histogram 
 ggplot(d,aes(x=CAL_YR, fill=SUBUNIT_CD)) +
    geom_histogram (binwidth = 1, position = "fill") +
   theme(text = element_text(size= 10)) +
     labs(title = "Location of accidents") 
-
+```
+```
 Legend: Accident type (SUBUNIT_CD) 1 is Underground, Accident 3 is Strip and Accident 30 is Mill operation/preparation Plant.
+```
 
+```
 It can be observed that the accident at location 1,3 and 30 are most prominent in across all the years.
+```
 
-Day of the week on which accidents had occurred
+<br>
+**Day of the week on which accidents had occurred**
+
+```{r}
 
 #data transformation - date to day of the week
 day_of_week<-(factor(weekdays(as.Date(d$ACCIDENT_DT))))
@@ -110,11 +93,13 @@ plot(ggplot(d) +
   geom_bar(aes(x=day_of_week)) +
   theme(text = element_text(size= 10)) +
     labs(title = "Accidents on days of the week")) 
-
+```
+```
 The number of accidents are uniformly spread over the days of week
-
-At what time of day does accident are frequent
-
+```
+<br>
+**At what time of day does accident are frequent**
+```{r}
 #data cleaning - removing "NA" values from ACCIDENT_TIME column
 
 d_NAr_Time <- d[which(!is.na(d$ACCIDENT_TIME)),]
@@ -137,11 +122,14 @@ plot(ggplot(d_NAr_Time2) +
   geom_bar(aes(x=ACCIDENT_TIME_CAT)) +
   theme(text = element_text(size= 10)) +
     labs(title = "Time of Accident")) 
+```
 
+```
 Accidents happen more in the morning and afternoon. cod for entries where time is entered in range of 9991 to 9999 might have other specific meaning related to them, which cannot be known from this data.
-
-Degree of Injury vs Time of the day
-
+```
+<br>
+**Degree of Injury vs Time of the day**
+```{r}
 #Data cleaning -  removing "?" in Degree of Injury
 Lines.containing.questionmarks= grep("\\?",d_NAr_Time2$DEGREE_INJURY_CD)
 d_NAr_Time_Q_Inj <- d_NAr_Time2[- Lines.containing.questionmarks, ]
@@ -151,10 +139,16 @@ counting<- count(d_NAr_Time_Q_Inj, DEGREE_INJURY_CD,  ACCIDENT_TIME_CAT)
 ggplot(data=counting, mapping = aes(x = ACCIDENT_TIME_CAT, y= DEGREE_INJURY_CD)) +
   geom_tile(mapping = aes(fill=n)) +
   labs(title = "Relation of time of the day with degree of Injury")
+```
 
+```
 It can be observed that degree of injuries in range of 3 to 6 are most common special during morning and afternoon time.
+```
+<br>
 
-State-wise number of Accidents
+**State-wise number of Accidents**
+
+```{r}
 
 # plot of graph
 plot(ggplot(d) +
@@ -162,10 +156,14 @@ plot(ggplot(d) +
   theme(text = element_text(size= 10)) +
     labs(title = "State in which Accident has occured") +
     annotate("text", x = c(21, 42, 54), y = c(26000,16000, 33000), label = "High Number"))
+```
 
+```
 It can be observed that three states with code 21, 42 and 54 have highest number of acccidents. 
-
-Circumstance of accident Vs Type of Accident
+```
+<br>
+**Circumstance of accident Vs Type of Accident**
+```{r}
 
 #Data cleaning:
 #CLASSIFICATION_CD and ACCIDENT_TYPE_CD have "?" as an anomaly entry and such entry i.e. "?" occur simultaneously in both of the columns
@@ -181,9 +179,13 @@ ggplot(data = d_Qr_CLASS_ACCI) +
   geom_count(mapping = aes(x=CLASSIFICATION_CD, y=ACCIDENT_TYPE_CD)) +
   labs(title = "Circumstance leading to type of accident")
 
+```
+```
 It can be oberved that combination of few circumstances (CLASSIFICATION_CD) and event (ACCIDENT_TYPE_CD) leading to Injury are more prominent than the other. Such as combination of circumstance 7, Fall of Roof along with event 44, i.e. Accident without injury, is one of the most common in the data. 
-
-Experience of person involved vs Degree of Injury
+```
+<br>
+**Experience of person involved vs Degree of Injury**
+```{r}
 
 #cleaning data - removing symbol "?" from the data
 d_Qr_TOT_EXPER <- d[-which(is.na(d$TOT_EXPER)),]
@@ -197,10 +199,13 @@ d_Qr_TOT_EXPER_OCC_job_Inj <- d_Qr_TOT_EXPER_OCC_job[-grep("\\?",d_Qr_TOT_EXPER_
 ggplot((data= d_Qr_TOT_EXPER_OCC_job_Inj), mapping = aes(x=DEGREE_INJURY_CD, y=TOT_EXPER)) +
   geom_boxplot() +
   labs(title = "Experience of invovled person vs degree of Injury")
-
+```
+```
 It can be interpreted from the above box plot that people with higher total work experience are more involved in higher degree of accident. It can be due to higher age (20+ work experience) of these workers and their reduction in spatial awareness in mining enviroment. Higher age employees might also be deficient in taking necessary action to avoid degree of injury at the time of accident. 
-
-Type of Activities leading to Injuries
+```
+<br>
+**Type of Activities leading to Injuries**
+```{r fig.height = 10, fig.width = 15}
 
 #graph for Causes of Accidents
 #Data cleaning
@@ -217,7 +222,9 @@ plot(ggplot(data=d_Qr_ACTI_INJ_BODY_PART_DEGREE_INJ) +
   theme(axis.text.x = element_text(face="bold", color="#993333", 
                            size=8, angle=90),  axis.text.y = element_text(face="bold", color="#993333", 
                            size=8)))
+```
 
+```
 Maximum number of injuries happen during Activities 23, 28, 30, 39, 92 and 99. 
 23 is GET ON/OFF EQUIPMENT/MACHINES
 28 is HANDLING SUPPLIES/MATERIALS
@@ -227,9 +234,10 @@ Maximum number of injuries happen during Activities 23, 28, 30, 39, 92 and 99.
 99 is Unkown
 
 Degree of seriousness of most of the injuries lie in range of 2 to 6. surprisingly the most severe degree account maximum in activity 99, which is Unkown. It could be due activities which leads to such high degree of injury are not given under existing codes of data capturing system.   
-
-Body part injured in activity
-
+```
+<br>
+**Body part injured in activity**
+```{r fig.height = 10, fig.width = 15}
 #plot of graph
 ggplot(data = d_Qr_ACTI_INJ_BODY_PART_DEGREE_INJ) +
   geom_count(mapping = aes(x=ACTIVITY_CD, y=INJ_BODY_PART_CD, color=DEGREE_INJURY_CD)) +
@@ -243,7 +251,9 @@ ggplot(data = d_Qr_ACTI_INJ_BODY_PART_DEGREE_INJ) +
   annotate("text", x = c(28, 92, 27, 26, 19), y = c(25.5,41.5,7.5,29.5,37.5), label = "Major Contributors") +
   annotate("text", x = c(96), y = c(23.5), label = "Major Contributors to higher degree of Injuries i.e. greater than degree 6", angle=90, color="#993333") +
     labs(title = "Count and Degree of body part injury during Activities")
+```
 
+```
 the above high-lighted Activites should be targeted such as 23, 28, 30, 39, 92 and 99. It should be seen what body part is suffering Injury and hence adequate counter measure should be taken such as specific body protective gear.
 
 For example, 
@@ -251,8 +261,9 @@ For example,
 there is very high number of injuries on FINGER(S)/THUMB (INJ_BODY_PART_CD number 340 on graph) which handling tools (ACTIVITY_CD number 30 on graph). 
 
 similarly counter measure can be taken for other major contributors to Injuries.
-Total business days lost due to Injury during Activity
-
+```
+**Total business days lost due to Injury during Activity**
+```{r fig.height = 10, fig.width = 15}
 #data cleaning
 d_0r_SCHE <- d[-grep("0",d$DAYS_LOST),]
 d_0Br_SCHE <- d_0r_SCHE[-grep("",d_0r_SCHE$DAYS_LOST),]
@@ -266,29 +277,36 @@ ggplot(data=d_0Br_SCHE_ACT) +
   theme(axis.text.x = element_text(face="bold", color="#993333", 
                            size=8, angle=90),  axis.text.y = element_text(face="bold", color="#993333", 
                            size=8))
-
+```
+```
 Activites such as 22, 28, 30, 39, 92 (where busines days lost are more due to frequent injurues) should be addressed first and adequate measure should be taken to create safe working condition for workers so that less business working days are lost
-
-Number of Accidents reported to MSHA
-
+```
+<br>
+**Number of Accidents reported to MSHA**
+```{r}
 ggplot(data=d) +
   geom_bar(aes(x=IMMED_NOTIFY_CD, fill=DEGREE_INJURY_CD)) +
   theme(text = element_text(size= 10)) +
     labs(title = "Accidents reported to MSHA") +
    annotate("text", x = c(1,6), y = c(60000,30000), label = "Not reported to MSHA", angle=90)
+```
 
+```
 Legend for X axis:
 (01) Death; (02) Serious injury; (03) Entrapment; (04) Inundation; (05) Gas of dust ignition; (06) Mine fire; (07) Explosives; (08) Roof fall; (09) Outburst; (10) Impounding dam; (11) Hoisting; (12) Offsite; (13) Not marked; (?) No value found
-
+```
+```
 Surprisingly, Majority of accidents which are of serious degree of Injury are not being reported to MSHA. This includes "?" and "13" bar in the above graph.
 
 on the other hand majority of incidents which are reported are of low degree of Injury.
 
 Such Non reporting hampers necessary action by MSHA to improve and mandate safe working conditions in Mines
+```
+<br>
+<br>
+***Conclusion***
 
-
-Conclusion
-
+```
 Certain facts about Accidents:
 1) The number of Accidents have continously fallen over the over
 2) Accidents occur mostly underground followed by on strips and mill operations
@@ -311,3 +329,4 @@ Accountability and Preventive Measure:
 
 Improvement in data capturing:
 13) For few attributes it is observedd that high number of event are not captured and "?" is entered. Such attributes include "Activity category", "Degree of Injury" and others. It might be due to lack of options under the attributes. Hence, it is recommended to update the data capturing system with adequate and updated number of options under each attribute.
+```
